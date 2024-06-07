@@ -15,3 +15,8 @@
 - Gunicorn
 - Nginx
 - React
+
+Данные для доступа:
+
+login - admin
+pass - admin
