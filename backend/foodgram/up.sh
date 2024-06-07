@@ -25,4 +25,4 @@ add_tag "Обед" "#00FF00" "lunch"
 add_tag "Ужин" "#0000FF" "dinner"
 
 # Запустить сервер
-gunicorn --bind 0.0.0.0:8080 foodgram.wsgi
+gunicorn --bind 0.0.0.0:8000 foodgram.wsgi
