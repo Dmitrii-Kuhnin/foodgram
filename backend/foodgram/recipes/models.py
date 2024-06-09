@@ -228,11 +228,13 @@ class BaseItem(models.Model):
         User,
         verbose_name="Пользователь",
         on_delete=models.CASCADE,
+        related_name="carts",
     )
     recipe = models.ForeignKey(
         Recipe,
         verbose_name="Рецепт",
         on_delete=models.CASCADE,
+        related_name="carts",
     )
 
     class Meta:
