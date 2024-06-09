@@ -1,3 +1,4 @@
+from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet as DjoserUserViewSet
 from rest_framework import status, mixins, viewsets
@@ -40,6 +41,15 @@ class CustomDjoserUserViewSet(DjoserUserViewSet):
     )
     def me(self, request):
         serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+        except Http404:
+            return Response({"error": "Пользователь не найден"},
+                            status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
 
@@ -131,6 +141,7 @@ class RecipeViewSet(ModelViewSet):
         permission_classes=[IsAuthenticated],
     )
     def shopping_cart(self, request, pk):
+        get_object_or_404(Recipe, pk=pk)
         recipe_processor = RecipeProcessor()
         err_msg = "Рецепт отсутствует в списке покупок."
         return recipe_processor.execute(
