@@ -19,5 +19,5 @@
 Данные для доступа:
 http://84.201.179.25/admin/
 
-login - admin
+login - admin@admin.com
 pass - admin
