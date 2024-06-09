@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.forms import ValidationError
 
 from .constants import LENGTH, MIN_VALUE_MSG, MIN_VALUE
 from .validators import username_validator, color_validator
@@ -28,6 +29,13 @@ class User(AbstractUser):
         verbose_name="Фамилия",
         max_length=LENGTH.l_150,
     )
+    email = models.EmailField(
+        verbose_name="email",
+        max_length=LENGTH.l_254,
+        unique=True,
+    )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
     class Meta:
         verbose_name = "Пользователь"
@@ -35,7 +43,7 @@ class User(AbstractUser):
         ordering = ["username"]
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class Subscribe(models.Model):
@@ -67,6 +75,10 @@ class Subscribe(models.Model):
 
     def __str__(self):
         return f"{self.user} подписчик автора - {self.author}"
+
+    def clean(self):
+        if self.user == self.author:
+            raise ValidationError("Нельзя подписаться на самого себя.")
 
 
 class Tag(models.Model):
