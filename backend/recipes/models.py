@@ -34,8 +34,8 @@ class User(AbstractUser):
         max_length=LENGTH.l_254,
         unique=True,
     )
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     class Meta:
         verbose_name = "Пользователь"
@@ -129,8 +129,8 @@ class Ingredient(models.Model):
         verbose_name_plural = "Ингредиенты"
         ordering = ["name"]
         constraints = [
-            models.UniqueConstraint(fields=['name', 'measurement_unit'],
-                                    name='unique_ingredient')
+            models.UniqueConstraint(fields=["name", "measurement_unit"],
+                                    name="unique_ingredient")
         ]
 
     def __str__(self):
@@ -208,8 +208,8 @@ class RecipeIngredient(models.Model):
         db_table = "recipes_recipe_ingredient"
         ordering = ["id"]
         constraints = [
-            models.UniqueConstraint(fields=['recipe', 'ingredient'],
-                                    name='unique_recipe_ingredient')
+            models.UniqueConstraint(fields=["recipe", "ingredient"],
+                                    name="unique_recipe_ingredient")
         ]
 
     def __str__(self):
