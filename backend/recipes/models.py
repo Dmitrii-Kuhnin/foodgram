@@ -221,30 +221,27 @@ class RecipeIngredient(models.Model):
         )
 
 
-class Favorite(models.Model):
-    """Модель избранного."""
+class BaseItem(models.Model):
+    """Базовая модель для избранного и списка покупок."""
 
     user = models.ForeignKey(
         User,
         verbose_name="Пользователь",
         on_delete=models.CASCADE,
-        related_name="favorites",
     )
     recipe = models.ForeignKey(
         Recipe,
         verbose_name="Рецепт",
         on_delete=models.CASCADE,
-        related_name="favorites",
     )
 
     class Meta:
-        verbose_name = "Избранное"
-        verbose_name_plural = "Избранное"
+        abstract = True
         ordering = ["id"]
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "recipe"],
-                name="unique_user_favorite",
+                name="unique_user_item",
             )
         ]
 
@@ -252,33 +249,18 @@ class Favorite(models.Model):
         return f"{self.user} - {self.recipe}"
 
 
-class ShoppingCart(models.Model):
-    """Модель списка покупок."""
+class Favorite(BaseItem):
+    """Модель избранного."""
 
-    user = models.ForeignKey(
-        User,
-        verbose_name="Пользователь",
-        on_delete=models.CASCADE,
-        related_name="carts",
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        verbose_name="Рецепт",
-        on_delete=models.CASCADE,
-        related_name="carts",
-    )
+    class Meta:
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранное"
+
+
+class ShoppingCart(BaseItem):
+    """Модель списка покупок."""
 
     class Meta:
         verbose_name = "Список покупок"
         verbose_name_plural = "Списки покупок"
         db_table = "recipes_shopping_cart"
-        ordering = ["id"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "recipe"],
-                name="unique_user_cart",
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.user} - {self.recipe}"
