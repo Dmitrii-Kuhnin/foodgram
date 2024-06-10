@@ -52,6 +52,16 @@ class CustomDjoserUserViewSet(DjoserUserViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
+    @action(
+        detail=False, methods=["PUT"], permission_classes=[IsAuthenticated]
+    )
+    def avatar(self, request):
+        serializer = self.get_serializer(request.user, data=request.data,
+                                         partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 class UserSubscribeView(APIView):
     """Подписка на пользователя."""

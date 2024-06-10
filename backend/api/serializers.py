@@ -41,6 +41,7 @@ class UserGetSerializer(UserSerializer):
     """Сериализатор получения информации о пользователе."""
 
     is_subscribed = serializers.SerializerMethodField()
+    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = User
@@ -51,10 +52,25 @@ class UserGetSerializer(UserSerializer):
             "first_name",
             "last_name",
             "is_subscribed",
+            "avatar",
         )
 
     def get_is_subscribed(self, obj):
         return check_subscribe(self.context.get("request"), obj)
+
+    def create(self, validated_data):
+        avatar_data = validated_data.pop("avatar", None)
+        user = super().create(validated_data)
+        if avatar_data:
+            user.avatar.save(avatar_data.name, avatar_data)
+        return user
+
+    def update(self, instance, validated_data):
+        avatar_data = validated_data.pop("avatar", None)
+        if avatar_data:
+            instance.avatar.delete()
+            instance.avatar.save(avatar_data.name, avatar_data)
+        return super().update(instance, validated_data)
 
 
 class UserSubscribeSerializer(serializers.ModelSerializer):
