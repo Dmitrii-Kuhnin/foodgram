@@ -25,6 +25,10 @@ urlpatterns = [
         "users/<int:user_id>/subscribe/",
         UserSubscribeView.as_view(),
     ),
+    path(
+        "users/me/avatar",
+        CustomDjoserUserViewSet.as_view({"put": "avatar"})
+    ),
     path("", include(router.urls)),
     path("auth/", include("djoser.urls.authtoken")),
 ]

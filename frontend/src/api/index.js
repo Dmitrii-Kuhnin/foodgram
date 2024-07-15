@@ -92,7 +92,7 @@ class Api {
 
   changeAvatar({ file }) {
     const token = localStorage.getItem("token");
-    return fetch(`/api/users/avatar/`, {
+    return fetch(`/api/users/me/avatar/`, {
       method: "PUT",
       headers: {
         ...this._headers,
@@ -104,7 +104,7 @@ class Api {
 
   deleteAvatar() {
     const token = localStorage.getItem("token");
-    return fetch(`/api/users/avatar/`, {
+    return fetch(`/api/users/me/avatar/`, {
       method: "DELETE",
       headers: {
         ...this._headers,
